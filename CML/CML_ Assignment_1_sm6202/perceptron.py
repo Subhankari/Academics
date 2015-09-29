@@ -176,20 +176,37 @@ print "********************** Dataset 1 (Iris class 0 & 2) ******************"
 print ""
 train_X1 = re_center(train_X1)
 test_X1 = re_center(test_X1)
+# the mean after re-centering is close to zero and standard deviation is 1 but
+#feature values range from 3 to -3.
+print "Mean on train data after re-centering: ", train_X1.mean(axis = 0)
+print "Standard deviation on train data after re-centering: ", train_X1.std(axis = 0)
+print "Mean on test data after re-centering: ", test_X1.mean(axis = 0)
+print "Standard deviation on test data after re-centering: ", test_X1.std(axis = 0)
 
 plt.scatter(train_X1[:,0], train_X1[:,1], c= ['c','g'])
 plt.scatter(train_X1[:,2], train_X1[:,3], c=['b','r'])
-plt.title("Feature plot: Dataset1 (Iris dataset class 0 & 2)")
+plt.title("Feature plot after re-centering: Dataset1 (Iris dataset class 0 & 2)")
 plt.show()
 
+train_X_minmax1 = min_max_scaler.fit_transform(train_X1)
+test_X_minmax1 = min_max_scaler.fit_transform(test_X1)
 train_y_minmax1 = min_max_scaler.fit_transform(train_y1)
 test_y_minmax1 = min_max_scaler.fit_transform(test_y1)
+#after using re-scaling using Min_Max_Scaler the mean is no more zero for the 
+#data and the standard variation also changes although the data lies in the range of [1,-1]
+print "Mean on train data after re-scaling: ", train_X_minmax1.mean(axis = 0)
+print "Standard deviation on train data after re-scaling: ", train_X_minmax1.std(axis = 0)
+print "Mean on test data after re-scaling: ", test_X_minmax1.mean(axis = 0)
+print "Standard deviation on test data after re-scaling: ", test_X_minmax1.std(axis = 0)
+
+plt.scatter(train_X_minmax1[:,0], train_X_minmax1[:,1], c= ['c','g'])
+plt.scatter(train_X_minmax1[:,2], train_X_minmax1[:,3], c=['b','r'])
+plt.title("Feature plot after re-scaling: Dataset1 (Iris dataset class 0 & 2)")
+plt.show()
 
 d = train_X1.shape[1]
 w1 = np.zeros(d)
 w1,outbtr1,outbtt1 = batch_perceptron(train_X1,train_y_minmax1,test_X1,test_y_minmax1,w1,max_iter,)
-#w1,outbtt1 = batch_perceptron(test_X1,test_y_minmax1,w1,max_iter,0)
-
 
 plt.plot(np.arange(outbtr1.shape[0]),outbtr1,'c',linewidth=2.5, linestyle="-",label = 'train error')
 plt.plot(np.arange(outbtt1.shape[0]),outbtt1,'g',linewidth=2.5, linestyle="-",label = 'test error')
@@ -199,6 +216,21 @@ plt.ylabel("% Misclassification Error")
 plt.title("Batch Perceptron: Dataset1 (Iris dataset class 0 & 2)")
 plt.legend(loc='upper left')
 plt.show()
+
+
+w1 = np.zeros(d)
+w1,outbtr1,outbtt1 = batch_perceptron(train_X_minmax1,train_y_minmax1,test_X_minmax1,test_y_minmax1,w1,max_iter)
+
+
+plt.plot(np.arange(outbtr1.shape[0]),outbtr1,'c',linewidth=2.5, linestyle="-",label = 'train error')
+plt.plot(np.arange(outbtt1.shape[0]),outbtt1,'g',linewidth=2.5, linestyle="-",label = 'test error')
+
+plt.xlabel("Iterations")
+plt.ylabel("% Misclassification Error")
+plt.title("Batch Perceptron with re-scaled input using Min_Max_Scaler: Dataset1 (Iris dataset class 0 & 2)")
+plt.legend(loc='upper left')
+plt.show()
+
 
 w1 = np.zeros(d)
 w1,outmtr1,outmtt1 = modif_perceptron(train_X1,train_y_minmax1,test_X1,test_y_minmax1,w1,max_iter,n)
@@ -223,9 +255,17 @@ print "********************** Dataset 2 (Iris class 1 & 2) ******************"
 print ""
 train_X2 = re_center(train_X2)
 test_X2 = re_center(test_X2)
+
+# the mean after re-centering is close to zero and standard deviation is 1 but
+#feature values range from 3 to -3.
+print "Mean on train data after re-centering: ", train_X2.mean(axis = 0)
+print "Standard deviation on train data after re-centering: ", train_X2.std(axis = 0)
+print "Mean on test data after re-centering: ", test_X2.mean(axis = 0)
+print "Standard deviation on test data after re-centering: ", test_X2.std(axis = 0)
+
 plt.scatter(train_X2[:,0],train_X2[:,1], c=['c','g'])
 plt.scatter(train_X2[:,2],train_X2[:,3], c=['b','r'])
-plt.title("Feature Plot: Dataset2 (Iris dataset class 1 & 2)")
+plt.title("Feature Plot after re-centering: Dataset2 (Iris dataset class 1 & 2)")
 plt.show()
 
 train_y_minmax2 = min_max_scaler.fit_transform(train_y2)
@@ -233,10 +273,25 @@ train_X_minmax2 = min_max_scaler.fit_transform(train_X2)
 test_X_minmax2 = min_max_scaler.fit_transform(test_X2)
 test_y_minmax2 = min_max_scaler.fit_transform(test_y2)
 
+#after using re-scaling using Min_Max_Scaler the mean is no more zero for the 
+#data and the standard variation also changes although the data lies in the
+#range of [1,-1] and also converges earlier than the only re-centered data
+print "Mean on train data after re-scaling: ", train_X_minmax2.mean(axis = 0)
+print "Standard deviation on train data after re-scaling: ", train_X_minmax2.std(axis = 0)
+print "Mean on test data after re-scaling: ", test_X_minmax2.mean(axis = 0)
+print "Standard deviation on test data after re-scaling: ", test_X_minmax2.std(axis = 0)
+
+plt.scatter(train_X_minmax2[:,0], train_X_minmax2[:,1], c= ['c','g'])
+plt.scatter(train_X_minmax2[:,2], train_X_minmax2[:,3], c=['b','r'])
+plt.title("Feature plot after re-scaling: Dataset2 (Iris dataset class 1 & 2)")
+plt.show()
+
+
 d = train_X2.shape[1]
+
 w2 = np.zeros(d)
 w2,outbtr2,outbtt2 = batch_perceptron(train_X2,train_y_minmax2,test_X2,test_y_minmax2,w2,max_iter)
-#w2,outbtt2 = batch_perceptron(test_X2,test_y_minmax2,w2,max_iter,0)
+
 
 plt.plot(np.arange(outbtr2.shape[0]),outbtr2,'c',linewidth=2.5, linestyle="-",label = 'train error')
 plt.plot(np.arange(outbtt2.shape[0]),outbtt2,'g',linewidth=2.5, linestyle="-",label = 'test error')
@@ -244,6 +299,19 @@ plt.plot(np.arange(outbtt2.shape[0]),outbtt2,'g',linewidth=2.5, linestyle="-",la
 plt.xlabel("Iterations")
 plt.ylabel("% Misclassification Error")
 plt.title("Batch Perceptron: Dataset2 (Iris dataset class 1 & 2)")
+plt.legend(loc='upper left')
+plt.show()
+
+w2 = np.zeros(d)
+w2,outbtr2,outbtt2 = batch_perceptron(train_X_minmax2,train_y_minmax2,test_X_minmax2,test_y_minmax2,w2,max_iter)
+
+
+plt.plot(np.arange(outbtr2.shape[0]),outbtr2,'c',linewidth=2.5, linestyle="-",label = 'train error')
+plt.plot(np.arange(outbtt2.shape[0]),outbtt2,'g',linewidth=2.5, linestyle="-",label = 'test error')
+
+plt.xlabel("Iterations")
+plt.ylabel("% Misclassification Error")
+plt.title("Batch Perceptron with re-scaled input using Min_Max_Scaler: Dataset2 (Iris dataset class 1 & 2)")
 plt.legend(loc='upper left')
 plt.show()
 
@@ -269,15 +337,35 @@ print "********************** Dataset 2 (Iris class 0 & 1) ******************"
 print ""
 train_X3 = re_center(train_X3)
 test_X3 = re_center(test_X3)
-plt.scatter(train_X3[:,0],train_X3[:,1], c=['c','g'])
-plt.scatter(train_X3[:,2],train_X3[:,3], c=['b','r'])
-plt.title("Feature Plot: Dataset3 (Iris dataset class 0 & 1)")
+# the mean after re-centering is close to zero and standard deviation is 1 but
+#feature values range from 3 to -3.
+print "Mean on train data after re-centering: ", train_X3.mean(axis = 0)
+print "Standard deviation on train data after re-centering: ", train_X3.std(axis = 0)
+print "Mean on test data after re-centering: ", test_X3.mean(axis = 0)
+print "Standard deviation on test data after re-centering: ", test_X3.std(axis = 0)
+
+plt.scatter(train_X3[:,0], train_X3[:,1], c= ['c','g'])
+plt.scatter(train_X3[:,2], train_X3[:,3], c=['b','r'])
+plt.title("Feature plot after re-centering: Dataset1 (Iris dataset class 0 & 1)")
 plt.show()
 
 train_y_minmax3 = min_max_scaler.fit_transform(train_y3)
 train_X_minmax3 = min_max_scaler.fit_transform(train_X3)
 test_X_minmax3 = min_max_scaler.fit_transform(test_X3)
 test_y_minmax3 = min_max_scaler.fit_transform(test_y3)
+
+#after using re-scaling using Min_Max_Scaler the mean is no more zero for the 
+#data and the standard variation also changes although the data lies in the
+#range of [1,-1] and also converges after the same number of iterations as the only re-centered data
+print "Mean on train data after re-scaling: ", train_X_minmax3.mean(axis = 0)
+print "Standard deviation on train data after re-scaling: ", train_X_minmax3.std(axis = 0)
+print "Mean on test data after re-scaling: ", test_X_minmax3.mean(axis = 0)
+print "Standard deviation on test data after re-scaling: ", test_X_minmax3.std(axis = 0)
+
+plt.scatter(train_X_minmax3[:,0], train_X_minmax3[:,1], c= ['c','g'])
+plt.scatter(train_X_minmax3[:,2], train_X_minmax3[:,3], c=['b','r'])
+plt.title("Feature plot after re-scaling: Dataset2 (Iris dataset class 0 & 1)")
+plt.show()
 
 d = train_X3.shape[1]
 w3 = np.zeros(d)
@@ -290,6 +378,19 @@ plt.plot(np.arange(outbtt3.shape[0]),outbtt3,'g',linewidth=2.5, linestyle="-",la
 plt.xlabel("Iterations")
 plt.ylabel("% Misclassification Error")
 plt.title("Batch Perceptron: Dataset3 (Iris dataset class 0 & 1)")
+plt.legend(loc='upper left')
+plt.show()
+
+w3 = np.zeros(d)
+w3,outbtr3,outbtt3 = batch_perceptron(train_X_minmax3,train_y_minmax3,test_X_minmax3,test_y_minmax3,w3,max_iter)
+
+
+plt.plot(np.arange(outbtr2.shape[0]),outbtr2,'c',linewidth=2.5, linestyle="-",label = 'train error')
+plt.plot(np.arange(outbtt2.shape[0]),outbtt2,'g',linewidth=2.5, linestyle="-",label = 'test error')
+
+plt.xlabel("Iterations")
+plt.ylabel("% Misclassification Error")
+plt.title("Batch Perceptron with re-scaled input using Min_Max_Scaler: Dataset2 (Iris dataset class 1 & 2)")
 plt.legend(loc='upper left')
 plt.show()
 
@@ -321,9 +422,23 @@ keys, train_data, test_data, train_labels, test_labels = load_titanic(
 print "********************** Dataset 4 (Titanic) ***************************"
 print ""
 train_data = re_center(train_data)
+train_data_minmax = min_max_scaler.fit_transform(train_data)
 train_labels_minmax = min_max_scaler.fit_transform(train_labels.astype(float))
 test_data = re_center(test_data)
+test_data_minmax = min_max_scaler.fit_transform(test_data)
 test_labels_minmax = min_max_scaler.fit_transform(test_labels.astype(float))
+
+print "Mean on train data after re-centering: ", train_data.mean(axis = 0)
+print "Standard deviation on train data after re-centering: ", train_data.std(axis = 0)
+print "Mean on test data after re-centering: ", test_data.mean(axis = 0)
+print "Standard deviation on test data after re-centering: ", test_data.std(axis = 0)
+
+#after using re-scaling using Min_Max_Scaler the mean is no more zero for the 
+#data and the standard variation also changes and also but algorithm never converges
+print "Mean on train data after re-scaling: ", train_data_minmax.mean(axis = 0)
+print "Standard deviation on train data after re-scaling: ", train_data_minmax.std(axis = 0)
+print "Mean on test data after re-scaling: ", test_data_minmax.mean(axis = 0)
+print "Standard deviation on test data after re-scaling: ", test_data_minmax.std(axis = 0)
 
 d = train_data.shape[1]
 w4 = np.zeros(d)
@@ -338,6 +453,20 @@ plt.ylabel("% Misclassification Error")
 plt.title("Batch Perceptron: Dataset4 (Titanic)")
 plt.legend(loc='upper left')
 plt.show()
+
+w4 = np.zeros(d)
+w4,outbtr4,outbtt4 = batch_perceptron(train_data_minmax,train_labels_minmax,test_data_minmax,test_labels_minmax,w4,max_iter)
+
+
+plt.plot(np.arange(outbtr2.shape[0]),outbtr2,'c',linewidth=2.5, linestyle="-",label = 'train error')
+plt.plot(np.arange(outbtt2.shape[0]),outbtt2,'g',linewidth=2.5, linestyle="-",label = 'test error')
+
+plt.xlabel("Iterations")
+plt.ylabel("% Misclassification Error")
+plt.title("Batch Perceptron with re-scaled input using Min_Max_Scaler: Dataset4 (Titanic)")
+plt.legend(loc='upper left')
+plt.show()
+
 
 w4 = np.zeros(d)
 w4,outmtr4,outmtt4 = modif_perceptron(train_data,train_labels_minmax,test_data,test_labels_minmax,w4,max_iter,n)
